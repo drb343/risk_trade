@@ -66,6 +66,9 @@ initial begin
     @(posedge clk);
     $display("decision: %d, fault detected: %d", tmr_decision, fault_detected); //decision should be 0, fault
     release dut1.uut2.decision;
+	 
+	 @(posedge clk);
+	 $display("decision: %d, fault detected: %d", tmr_decision, fault_detected); //decision should be 0, fault should clear 
 
 end
 
