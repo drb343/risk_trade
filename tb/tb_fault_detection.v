@@ -69,6 +69,8 @@ initial begin
 	 
 	 @(posedge clk);
 	 $display("decision: %d, fault detected: %d", tmr_decision, fault_detected); //decision should be 0, fault should clear 
+	 
+	 $finish;
 
 end
 
