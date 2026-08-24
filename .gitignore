@@ -1,0 +1,11 @@
+﻿db/
+incremental_db/
+output_files/
+work/
+simulation/
+*.bak
+*.qpf
+*.qsf
+c5_pin_model_dump.txt
+template_description.txt
+template_nativelink_simulation.rpt
