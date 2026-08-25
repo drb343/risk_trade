@@ -15,7 +15,7 @@ module tt_um_risk_trade (
     input  wire       clk, 
     input  wire       rst_n  
 );
-
+  //per TT standards, data can only get passed in as single bytes, however risk_engine modules requires 4 bytes
   reg [31:0] accum;
   reg [31:0] price_in_reg;
   reg [31:0] config_in_reg;
@@ -31,6 +31,8 @@ module tt_um_risk_trade (
   assign uio_oe  = 8'b00000000;
   assign uio_out = 8'd0;
   
+
+  //Keep a running count of all of the bytes passed in, when it reaches 4 bytes reset
   always @ (posedge clk) begin
     if (!rst_n) begin
       	count <=0;
@@ -44,8 +46,11 @@ module tt_um_risk_trade (
     
   end 
   
+  //Accumulate the incoming byte into the 4 byte register
   wire [31:0] accum_next = {accum[23:0], ui_in};
   
+
+  //PAss it into the register
   always @(posedge clk) begin
     if (!rst_n) begin
       accum <=0;
@@ -57,8 +62,10 @@ module tt_um_risk_trade (
     
   end 
   
+  //Once all 4 bytes are inside the register, we are ready to change price or config going into risk_engine
   assign ready = (count == 3 && byte_valid) ? 1 : 0;
   
+  //Depending on is_config flag, or accum register will either hold config or price data
   always @(posedge clk) begin
     if (!rst_n) begin
       price_in_reg <= 0;
@@ -81,6 +88,8 @@ module tt_um_risk_trade (
     .fault_detected(uo_out[1])
   );
     
+
+  //Only need first 2 bits of uo_out per risk_engine convention
   assign uo_out[7:2] = 6'b0; 
   
 endmodule
