@@ -38,14 +38,14 @@ async def test_project(dut):
     await load_word(dut, 50,   is_config=1, cfg_sel=1)  # collar_ticks
     await load_word(dut, 2000, is_config=1, cfg_sel=2)  # diff_threshold
 
-    dut._log.info(f"ref_price_reg={dut.dut1.uut1.ref_price_reg.value}")
-    dut._log.info(f"collar_ticks_reg={dut.dut1.uut1.collar_ticks_reg.value}")
-    dut._log.info(f"diff_threshold={dut.dut1.uut1.diff_threshold.value}")
+    dut._log.info(f"ref_price_reg={dut.user_project.dut1.uut1.ref_price_reg.value}")
+    dut._log.info(f"collar_ticks_reg={dut.user_project.dut1.uut1.collar_ticks_reg.value}")
+    dut._log.info(f"diff_threshold={dut.user_project.dut1.uut1.diff_threshold.value}")
 
     await load_word(dut, 1010, is_config=0)
 
-    dut._log.info(f"price_in_reg={dut.dut1.price_in_reg.value}")
-    dut._log.info(f"prev_price={dut.dut1.uut1.prev_price.value}")
+    dut._log.info(f"price_in_reg={dut.user_project.dut1.price_in_reg.value}")
+    dut._log.info(f"prev_price={dut.user_project.dut1.uut1.prev_price.value}")
 
     await ClockCycles(dut.clk, 1)
 
