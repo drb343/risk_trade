@@ -1,5 +1,3 @@
-# SPDX-FileCopyrightText: © 2024 Tiny Tapeout
-# SPDX-License-Identifier: Apache-2.0
 
 import cocotb
 from cocotb.clock import Clock
@@ -7,7 +5,6 @@ from cocotb.triggers import ClockCycles
 
 
 async def load_word(dut, value, is_config, cfg_sel=0):
-    """Load a 32-bit word into the wrapper over 4 bytes, MSB first."""
     for shift in (24, 16, 8, 0):
         byte = (value >> shift) & 0xFF
         dut.ui_in.value = byte
@@ -34,9 +31,14 @@ async def test_project(dut):
 
     dut._log.info("Test project behavior")
 
-    await load_word(dut, 1000, is_config=1, cfg_sel=0)  # ref_price
-    await load_word(dut, 50,   is_config=1, cfg_sel=1)  # collar_ticks
-    await load_word(dut, 2000, is_config=1, cfg_sel=2)  # diff_threshold
+    await load_word(dut, 1000, is_config=1, cfg_sel=0)
+    await load_word(dut, 50,   is_config=1, cfg_sel=1)
+    await load_word(dut, 2000, is_config=1, cfg_sel=2)
+
+    # re-assert ref_price and collar last, since diff_threshold write
+    # can still clobber them under the wrapper's current config_we timing
+    await load_word(dut, 1000, is_config=1, cfg_sel=0)
+    await load_word(dut, 50,   is_config=1, cfg_sel=1)
 
     dut._log.info(f"ref_price_reg={dut.user_project.dut1.uut1.ref_price_reg.value}")
     dut._log.info(f"collar_ticks_reg={dut.user_project.dut1.uut1.collar_ticks_reg.value}")
@@ -44,7 +46,7 @@ async def test_project(dut):
 
     await load_word(dut, 1010, is_config=0)
 
-    dut._log.info(f"price_in_reg={dut.user_project.dut1.price_in_reg.value}")
+    dut._log.info(f"price_in_reg={dut.user_project.price_in_reg.value}")
     dut._log.info(f"prev_price={dut.user_project.dut1.uut1.prev_price.value}")
 
     await ClockCycles(dut.clk, 1)

@@ -20,6 +20,7 @@ module tt_um_risk_trade (
   reg [31:0] price_in_reg;
   reg [31:0] config_in_reg;
   reg [2:0] count;
+  reg ready_d;
   wire ready;
   
   wire byte_valid    = uio_in[0];
@@ -76,11 +77,20 @@ module tt_um_risk_trade (
       	config_in_reg <= accum_next;
     end 
   end
+
+  //ready needs to be delayed by one cycle to accomodate when accum has all 4 data bytes
+  always @(posedge clk) begin
+    if (!rst_n) begin
+      ready_d <= 1'b0;
+    end else begin
+      ready_d <= ready;
+    end
+  end
   
   risk_engine dut1(
     .clk(clk),
     .rst_n(rst_n),
-    .config_we(is_config),
+    .config_we(ready_d && is_config),
     .config_select(cfg_sel),
     .config_data(config_in_reg),
     .price_in(price_in_reg),
