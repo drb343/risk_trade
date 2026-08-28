@@ -40,14 +40,22 @@ async def test_project(dut):
     await load_word(dut, 1000, is_config=1, cfg_sel=0)
     await load_word(dut, 50,   is_config=1, cfg_sel=1)
 
-    dut._log.info(f"ref_price_reg={dut.user_project.dut1.uut1.ref_price_reg.value}")
-    dut._log.info(f"collar_ticks_reg={dut.user_project.dut1.uut1.collar_ticks_reg.value}")
-    dut._log.info(f"diff_threshold={dut.user_project.dut1.uut1.diff_threshold.value}")
+    # In the gate level netlist, these 3 components don't exist, but they exist in the RTL sim, so we aren't worried about these not passing
+    try:
+        dut._log.info(f"ref_price_reg={dut.user_project.dut1.uut1.ref_price_reg.value}")
+        dut._log.info(f"collar_ticks_reg={dut.user_project.dut1.uut1.collar_ticks_reg.value}")
+        dut._log.info(f"diff_threshold={dut.user_project.dut1.uut1.diff_threshold.value}")
+    except AttributeError:
+        pass
 
     await load_word(dut, 1010, is_config=0)
 
-    dut._log.info(f"price_in_reg={dut.user_project.price_in_reg.value}")
-    dut._log.info(f"prev_price={dut.user_project.dut1.uut1.prev_price.value}")
+    #These 2 exist in the RTL sim, just not in the gate level netlist (variable name not preserved during synthesis)
+    try:
+        dut._log.info(f"price_in_reg={dut.user_project.price_in_reg.value}")
+        dut._log.info(f"prev_price={dut.user_project.dut1.uut1.prev_price.value}")
+    except AttributeError:
+        pass
 
     await ClockCycles(dut.clk, 1)
 
