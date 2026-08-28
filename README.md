@@ -12,6 +12,8 @@ Have a decision 0, decision 1, and then a decision 1 but with an injected error,
 
 ## Chip Layout
 <img width="605" height="842" alt="image" src="https://github.com/user-attachments/assets/5000436e-5477-4a9a-af4f-a360c7001701" />
+
+
 https://drb343.github.io/risk_trade/
 
 ## Routing and Utilization
