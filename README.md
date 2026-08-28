@@ -10,6 +10,14 @@ Have a decision 0, decision 1, and then a decision 1 but with an injected error,
 
 <img width="262" height="78" alt="image" src="https://github.com/user-attachments/assets/120647d7-7014-43c9-99a9-c53fc9ef60bb" />
 
+## Chip Layout
+<img width="605" height="842" alt="image" src="https://github.com/user-attachments/assets/5000436e-5477-4a9a-af4f-a360c7001701" />
+https://drb343.github.io/risk_trade/
+
+## Routing and Utilization
+Utilisation: 79.676 %
+Wire length: 73417 um
+
 ## About Tiny Tapeout
 
 This project is built on the [Tiny Tapeout](https://tinytapeout.com) Verilog template, which uses [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/) via GitHub Actions to build the ASIC files against the Sky130 PDK.
